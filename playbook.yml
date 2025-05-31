@@ -1,0 +1,13 @@
+---
+# playbook.yml
+- name: Deploy LEMP stack and install Joomla
+  hosts: joomla_servers
+  become: yes
+  vars:
+    php_version: "8.1"
+  roles:
+    - mysql
+    - php
+    - nginx
+    - initapps
+    - joomla

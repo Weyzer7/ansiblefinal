@@ -1,0 +1,52 @@
+---
+# roles/nginx/tasks/main.yml
+
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Ensure Nginx is running and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Remove default site symlink (if exists)
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Create directory for Joomla (если его ещё нет)
+  ansible.builtin.file:
+    path: "{{ joomla_root }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: "0755"
+
+- name: Render joomla.conf в sites-available
+  ansible.builtin.template:
+    src: joomla.conf.j2
+    dest: "{{ nginx_sites_available }}/{{ joomla_conf }}"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: reload nginx
+
+- name: Create symlink в sites-enabled
+  ansible.builtin.file:
+    src: "{{ nginx_sites_available }}/{{ joomla_conf }}"
+    dest: "{{ nginx_sites_enabled }}/{{ joomla_conf }}"
+    state: link
+    force: yes
+
+- name: Test nginx configuration
+  ansible.builtin.command: nginx -t
+  register: nginx_test
+  changed_when: false
+  failed_when: nginx_test.rc != 0
+
+- name: Reload nginx if config changed
+  ansible.builtin.meta: flush_handlers

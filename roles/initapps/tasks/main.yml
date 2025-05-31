@@ -1,0 +1,23 @@
+---
+# roles/initapps/tasks/main.yml
+
+- name: Create Joomla root directory (если нет)
+  ansible.builtin.file:
+    path: "{{ joomla_root }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: "0755"
+
+- name: Установить права владельца www-data для всего дерева joomla
+  ansible.builtin.file:
+    path: "{{ joomla_root }}"
+    recurse: yes
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+
+- name: Ensure PHP socket dir permissions (для безопасности)
+  ansible.builtin.file:
+    path: /var/run/php
+    state: directory
+    mode: "0755"

@@ -1,0 +1,4 @@
+---
+# roles/initapps/defaults/main.yml
+joomla_root: "/var/www/sites/joomla"
+nginx_user: "www-data"

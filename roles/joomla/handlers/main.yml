@@ -1,0 +1,6 @@
+---
+# roles/joomla/handlers/main.yml
+
+- name: Set permissions for Joomla files
+  ansible.builtin.command:
+    cmd: chown -R "{{ nginx_user }}:{{ nginx_user }}" "{{ joomla_root }}"

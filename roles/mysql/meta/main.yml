@@ -1,0 +1,3 @@
+---
+# roles/mysql/meta/main.yml
+dependencies: []

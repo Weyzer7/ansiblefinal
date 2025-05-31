@@ -1,0 +1,7 @@
+---
+# roles/nginx/defaults/main.yml
+nginx_user: "www-data"
+joomla_root: "/var/www/sites/joomla"
+nginx_sites_available: "/etc/nginx/sites-available"
+nginx_sites_enabled: "/etc/nginx/sites-enabled"
+joomla_conf: "joomla.conf"

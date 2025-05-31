@@ -1,0 +1,4 @@
+---
+# roles/mysql/defaults/main.yml
+# Здесь не нужны публичные дефолты, все секреты из vault.yml
+
